@@ -1,3 +1,13 @@
+### Portfolio Project by Rahmat Hidayat
+
+Available for freelance, consulting, contract, and full-time opportunities.
+
+- **📧 Email**: rahmat6hidayat@gmail.com
+- **💼 LinkedIn**: https://www.linkedin.com/in/rahmat6hidayat
+- **📍 Location**: Jakarta, Indonesia
+
+This repository showcases a production-grade browser automation and traffic simulation platform designed for testing, monitoring, and analytics scenarios. It demonstrates automation engineering, real-time dashboard development, session management, logging architecture, and scalable Python application design.
+
 # Web Traffic Testing Simulator
 
 A Python-based web traffic simulation tool built with Selenium and a real-time Flask dashboard.
@@ -145,3 +155,7 @@ results = run_bot('https://example.com', total_visits=10)
 - Each session uses a randomized **user-agent**
 - Random delays between sessions (default 3 to 8 seconds) help simulate realistic browsing behavior
 - Logs are automatically stored in `logs/bot.log`
+
+## 📄 Disclaimer
+
+This repository is presented for portfolio and demonstration purposes only. All rights belong to their respective owners. If you would like to discuss similar projects, consulting opportunities, freelance work, or full-time positions, feel free to contact me through the information provided above.
