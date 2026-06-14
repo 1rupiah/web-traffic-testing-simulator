@@ -4,6 +4,34 @@ A Python-based web traffic simulation tool built with Selenium and a real-time F
 
 ---
 
+## 📸 Dashboard Screenshots
+
+### Dashboard Overview
+
+![Dashboard Overview](images/Menu%20-%20Dashboard.png)
+
+Real-time dashboard displaying traffic simulation statistics, active sessions, visit counts, and execution status.
+
+### Session Monitoring
+
+![Session Monitoring](images/Menu%20-%20Sessions.png)
+
+Session management interface showing running visits, completed sessions, timestamps, and execution progress.
+
+### Configuration Panel
+
+![Configuration Panel](images/Menu%20-%20Config.png)
+
+Configuration page for managing target URLs, visit counts, delays, browser settings, and simulation parameters.
+
+### Live Logs
+
+![Live Logs](images/Menu%20-%20Logs.png)
+
+Real-time logging console displaying browser activity, traffic generation events, session updates, and diagnostic information.
+
+---
+
 ## 🗂 Structure Project
 
 ```
