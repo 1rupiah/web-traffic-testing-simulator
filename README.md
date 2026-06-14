@@ -86,7 +86,7 @@ python app.py
 Open your browser:
 
 ```text
-http://localhost:5000
+http://localhost:5001
 ```
 
 ---
