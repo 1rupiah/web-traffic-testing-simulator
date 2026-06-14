@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>TrafficBot — SEO Click Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo">
+    <span class="logo-icon">⟳</span>
+    <span class="logo-text">TrafficBot</span>
+  </div>
+  <nav>
+    <a href="#" class="nav-item active" data-page="dashboard">Dashboard</a>
+    <a href="#" class="nav-item" data-page="sessions">Sessions</a>
+    <a href="#" class="nav-item" data-page="config">Config</a>
+    <a href="#" class="nav-item" data-page="logs">Logs</a>
+  </nav>
+  <div class="sidebar-footer">Python · Selenium</div>
+</aside>
+
+<main class="main">
+
+  <!-- ═══════════════ DASHBOARD PAGE ═══════════════ -->
+  <div id="page-dashboard" class="page active">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Bot Clicker Dashboard</h1>
+        <p class="page-sub">SEO Traffic Simulator — dibuat dengan Selenium</p>
+      </div>
+      <div id="status-badge" class="badge badge--idle">Idle</div>
+    </header>
+
+    <section class="card control-card">
+      <h2 class="card-title">Jalankan Bot</h2>
+      <div class="control-row">
+        <div class="field">
+          <label>Target URL</label>
+          <input id="inp-url" type="url" placeholder="https://example.com" value="{{ config.TARGET_URL }}"/>
+        </div>
+        <div class="field field--sm">
+          <label>Jumlah Kunjungan</label>
+          <input id="inp-visits" type="number" min="1" max="500" value="{{ config.TOTAL_VISITS }}"/>
+        </div>
+        <button id="btn-run" class="btn-run" onclick="startBot()">▶ Jalankan</button>
+      </div>
+      <div id="progress-wrap" class="progress-wrap hidden">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width:0%"></div></div>
+        <span id="progress-label" class="progress-label">0 / 0</span>
+      </div>
+    </section>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Kunjungan</div>
+      </div>
+      <div class="stat-card stat-card--green">
+        <div class="stat-value" id="stat-success">0</div>
+        <div class="stat-label">Berhasil</div>
+      </div>
+      <div class="stat-card stat-card--red">
+        <div class="stat-value" id="stat-fail">0</div>
+        <div class="stat-label">Gagal</div>
+      </div>
+      <div class="stat-card stat-card--blue">
+        <div class="stat-value" id="stat-rate">—</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2 class="card-title">Session Log</h2>
+      <div class="table-wrap">
+        <table class="log-table">
+          <thead>
+            <tr><th>#</th><th>Waktu</th><th>URL</th><th>Page Title</th><th>Durasi</th><th>Status</th></tr>
+          </thead>
+          <tbody id="log-body">
+            <tr class="empty-row"><td colspan="6">Belum ada sesi. Tekan ▶ Jalankan untuk mulai.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Live Log</h2>
+      <div id="terminal" class="terminal"></div>
+    </section>
+  </div>
+
+  <!-- ═══════════════ SESSIONS PAGE ═══════════════ -->
+  <div id="page-sessions" class="page">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Sessions</h1>
+        <p class="page-sub">Riwayat semua sesi yang telah dijalankan</p>
+      </div>
+      <button class="btn-danger" onclick="clearSessions()">🗑 Hapus Semua</button>
+    </header>
+
+    <div class="stats-grid" id="sess-stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="sess-stat-total">0</div>
+        <div class="stat-label">Total Sesi</div>
+      </div>
+      <div class="stat-card stat-card--green">
+        <div class="stat-value" id="sess-stat-ok">0</div>
+        <div class="stat-label">Berhasil</div>
+      </div>
+      <div class="stat-card stat-card--red">
+        <div class="stat-value" id="sess-stat-fail">0</div>
+        <div class="stat-label">Gagal</div>
+      </div>
+      <div class="stat-card stat-card--blue">
+        <div class="stat-value" id="sess-stat-rate">—</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="card-header-row">
+        <h2 class="card-title">Semua Sesi</h2>
+        <button class="btn-sm" onclick="loadSessions()">↻ Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table class="log-table">
+          <thead>
+            <tr><th>#</th><th>Waktu</th><th>URL</th><th>Page Title</th><th>Durasi</th><th>Status</th></tr>
+          </thead>
+          <tbody id="sessions-body">
+            <tr class="empty-row"><td colspan="6">Belum ada riwayat sesi.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══════════════ CONFIG PAGE ═══════════════ -->
+  <div id="page-config" class="page">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Config</h1>
+        <p class="page-sub">Pengaturan bot clicker</p>
+      </div>
+      <span id="cfg-save-badge" class="badge badge--idle" style="display:none">Tersimpan ✓</span>
+    </header>
+
+    <div class="config-grid">
+      <section class="card">
+        <h2 class="card-title">Target & Kunjungan</h2>
+        <div class="cfg-group">
+          <label class="cfg-label">Target URL</label>
+          <input id="cfg-url" type="url" class="cfg-input" placeholder="https://example.com"/>
+          <p class="cfg-hint">URL yang akan dikunjungi bot.</p>
+        </div>
+        <div class="cfg-group">
+          <label class="cfg-label">Jumlah Kunjungan</label>
+          <input id="cfg-visits" type="number" class="cfg-input" min="1" max="500"/>
+          <p class="cfg-hint">Total sesi yang dijalankan per eksekusi.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Timing</h2>
+        <div class="cfg-group">
+          <label class="cfg-label">Jeda Minimum (detik)</label>
+          <input id="cfg-min-gap" type="number" class="cfg-input" step="0.5" min="0"/>
+          <p class="cfg-hint">Jeda minimum antar sesi.</p>
+        </div>
+        <div class="cfg-group">
+          <label class="cfg-label">Jeda Maksimum (detik)</label>
+          <input id="cfg-max-gap" type="number" class="cfg-input" step="0.5" min="0"/>
+          <p class="cfg-hint">Jeda maksimum antar sesi.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Browser</h2>
+        <div class="cfg-group">
+          <label class="cfg-label">Mode Headless</label>
+          <div class="toggle-row">
+            <label class="toggle">
+              <input type="checkbox" id="cfg-headless"/>
+              <span class="toggle-slider"></span>
+            </label>
+            <span id="cfg-headless-label" class="cfg-hint" style="margin:0">Aktif (tanpa jendela browser)</span>
+          </div>
+          <p class="cfg-hint" style="margin-top:8px">Matikan untuk melihat browser berjalan.</p>
+        </div>
+      </section>
+
+      <section class="card cfg-ua-card">
+        <h2 class="card-title">User-Agent Pool</h2>
+        <p class="cfg-hint" style="margin-bottom:12px">Satu user-agent per baris. Bot akan memilih secara acak.</p>
+        <textarea id="cfg-ua" class="cfg-textarea" rows="8" spellcheck="false"></textarea>
+      </section>
+    </div>
+
+    <div class="cfg-actions">
+      <button class="btn-run" onclick="saveConfig()">💾 Simpan Config</button>
+      <button class="btn-secondary" onclick="loadConfig()">↻ Reset</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ LOGS PAGE ═══════════════ -->
+  <div id="page-logs" class="page">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Logs</h1>
+        <p class="page-sub">Isi file <code>logs/bot.log</code></p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-sm" onclick="loadLogs()">↻ Refresh</button>
+        <button class="btn-danger" onclick="clearLogs()">🗑 Clear Log</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="card-header-row">
+        <h2 class="card-title">File Log</h2>
+        <span id="log-line-count" class="cfg-hint">0 baris</span>
+      </div>
+      <div id="log-viewer" class="terminal log-viewer">
+        <span style="color:var(--muted)">Klik Refresh untuk memuat log...</span>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
