@@ -1,16 +1,16 @@
-# TrafficBot — SEO Click Simulator
+# Web Traffic Testing Simulator
 
-Bot clicker berbasis Python + Selenium dengan dashboard web real-time.
+A Python-based web traffic simulation tool built with Selenium and a real-time Flask dashboard.
 
 ---
 
-## 🗂 Struktur Project
+## 🗂 Structure Project
 
 ```
-bot-clicker-portfolio/
+web-traffic-testing-simulator/
 ├── app.py              ← Flask web dashboard
-├── config.py           ← Konfigurasi bot (URL, jumlah visit, dll)
-├── requirements.txt    ← Dependencies Python
+├── config.py           ← Bot configuration (URL, visit count, etc.)
+├── requirements.txt    ← Python dependencies
 ├── src/
 │   └── bot.py          ← Core Selenium bot logic
 ├── static/
@@ -18,84 +18,89 @@ bot-clicker-portfolio/
 │   └── js/app.js
 ├── templates/
 │   └── index.html
-└── logs/               ← Auto-dibuat saat bot jalan
+└── logs/               ← Automatically created during execution
 ```
 
 ---
 
 ## ⚙️ Prerequisites
 
-Pastikan sudah install:
+Make sure the following software is installed:
+
 - **Python 3.10+** → https://python.org/downloads
 - **Google Chrome** → https://google.com/chrome
-- **pip** (biasanya sudah include dengan Python)
+- **pip** (usually included with Python)
 
 ---
 
-## 🚀 Step-by-Step: Cara Jalankan
+## 🚀 Step-by-Step: Getting Started
 
-### 1. Clone / Download repo
+### 1. Clone / Download Repository
 
 ```bash
-# Kalau pakai git:
-git clone <url-repo-lo>
-cd bot-clicker-portfolio
+# Using Git:
+git clone https://github.com/1rupiah/web-traffic-testing-simulator.git
+cd web-traffic-testing-simulator
 
-# Atau ekstrak ZIP, lalu masuk foldernya:
-cd bot-clicker-portfolio
+# Or extract the ZIP file and enter the project folder:
+cd web-traffic-testing-simulator
 ```
 
-### 2. Buat virtual environment (recommended)
+### 2. Create Virtual Environment (Recommended)
 
 ```bash
 python -m venv venv
 
-# Activate — Windows:
+# Activate on Windows:
 venv\Scripts\activate
 
-# Activate — Mac/Linux:
+# Activate on macOS/Linux:
 source venv/bin/activate
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-> `webdriver-manager` akan otomatis download ChromeDriver yang sesuai versi Chrome lo — ga perlu install manual.
+> `webdriver-manager` automatically downloads the correct ChromeDriver version for your installed Chrome browser. No manual installation is required.
 
-### 4. Set target URL (opsional)
+### 4. Configure Target URL (Optional)
 
-Edit file `config.py`:
+Edit `config.py`:
 
 ```python
-TARGET_URL   = "https://website-lo.com"   # ← ganti ini
-TOTAL_VISITS = 20                          # jumlah kunjungan default
+TARGET_URL   = "https://your-website.com"
+TOTAL_VISITS = 20
 ```
 
-Atau bisa langsung set dari dashboard web (lebih gampang).
+Or configure it directly from the web dashboard.
 
-### 5. Jalankan dashboard
+### 5. Start the Dashboard
 
 ```bash
 python app.py
 ```
 
-Buka browser → http://localhost:5000
+Open your browser:
+
+```text
+http://localhost:5000
+```
 
 ---
 
-## 🖥 Cara Pakai Dashboard
+## 🖥 Dashboard Usage
 
-1. Isi **Target URL** (URL yang mau dikasih traffic)
-2. Isi **Jumlah Kunjungan**
-3. Klik **▶ Jalankan**
-4. Pantau progress di tabel Session Log dan Live Log
+1. Enter the **Target URL**
+2. Specify the **Number of Visits**
+3. Click **▶ Start**
+4. Monitor progress through the Session Log and Live Log tables
 
 ---
 
-## 🔧 Jalankan bot via terminal (tanpa dashboard)
+## 🔧 Run from Terminal (Without Dashboard)
 
 ```bash
 python -c "
@@ -106,9 +111,9 @@ results = run_bot('https://example.com', total_visits=10)
 
 ---
 
-## ⚠️ Catatan
+## ⚠️ Notes
 
-- Bot berjalan **headless** (tanpa jendela browser) secara default. Untuk debug, ubah `HEADLESS = False` di `config.py`
-- Setiap sesi menggunakan **user-agent berbeda** secara acak
-- Ada **jeda random** antar sesi (default 3–8 detik) untuk simulasi traffic organik
-- Log disimpan otomatis di folder `logs/bot.log`
+- The bot runs in **headless mode** by default. For debugging purposes, set `HEADLESS = False` in `config.py`
+- Each session uses a randomized **user-agent**
+- Random delays between sessions (default 3 to 8 seconds) help simulate realistic browsing behavior
+- Logs are automatically stored in `logs/bot.log`
